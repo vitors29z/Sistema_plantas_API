@@ -13,9 +13,9 @@ class Rotas
                         Acao::POST => new Endpoint("Cliente","inserir"),
                         Acao::GET => new Endpoint("Cliente","listar")
                 ]),
-                "alunos" =>new Acao([
+                "plantas" =>new Acao([
 
-                    Acao::GET => new Endpoint("Aluno","teste")
+                    Acao::GET => new Endpoint("Planta","teste")
                 ])
             ];
     }
