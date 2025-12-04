@@ -14,7 +14,7 @@ Para rodar o projeto localmente, voce precisara de:
 
 1.  **Servidor Web:** Apache ou Nginx (Recomendado o uso de pacotes como XAMPP, WAMP ou MAMP).
 2.  **PHP:** Versao 7x ou superior.
-3.  **Banco de Dados:** MySQL/MariaDB.
+3.  **Banco de Dados:** MySQL.
 4.  **Extensoes PHP:** Necessario ter a extensao `pdo_mysql` e as bibliotecas JWT configuradas.
 
 ### 1. Configuracao do Banco de Dados
@@ -62,3 +62,4 @@ O sistema suporta todas as operacoes CRUD (Create, Read, Update, Delete) atraves
 private $dsn = 'mysql:host=localhost;dbname=sistema_plantas';
 private $usuario = 'root';
 private $senha = '';
+
