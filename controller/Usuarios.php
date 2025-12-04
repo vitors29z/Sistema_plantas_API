@@ -17,7 +17,7 @@ class Usuarios
     public function listar()
     {
         $service = new UsuarioService();
-        $resultado = $service->listarUsuario();
+        $resultado = $service->listarUsuarios();
         return $resultado;
     }
 
