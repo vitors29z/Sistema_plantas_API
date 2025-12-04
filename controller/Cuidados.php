@@ -2,70 +2,52 @@
 namespace controller;
 
 use service\CuidadoService;
-use template\CuidadoTemp;
-use template\ITemplate;
-use service\UsuarioService;
-use service\PlantaService;
+use service\UsuarioService; // Para popular selects no form
+use service\PlantaService;  // Para popular selects no form
 
 class Cuidados {
-    private ITemplate $template;
-
-    public function __construct() {
-        $this->template = new CuidadoTemp();
-    }
 
     public function listar() {
         $service = new CuidadoService();
-        $resultado = $service->listarCuidados();
-        $this->template->layout("\\public\\cuidados\\listar.php", $resultado);
+        return $service->listar();
     }
 
-    public function inserir() {
-        $usuario_id = $_POST["usuario_id"];
-        $planta_id = $_POST["planta_id"];
-        $tipo_cuidado = $_POST["tipo_cuidado"];
-        $frequencia = $_POST["frequencia"];
+    public function inserir($usuario_id, $planta_id, $tipo_cuidado, $frequencia) {
         $service = new CuidadoService();
-        $resultado = $service->inserir($usuario_id, $planta_id, $tipo_cuidado, $frequencia);
-        header("location: /sistema_plantas/cuidados/lista?info=1");
+        return $service->inserir($usuario_id, $planta_id, $tipo_cuidado, $frequencia);
     }
 
-    // controller/Cuidados.php
+    public function alterar($id, $usuario_id, $planta_id, $tipo_cuidado, $frequencia) {
+        $service = new CuidadoService();
+        return $service->alterar($id, $usuario_id, $planta_id, $tipo_cuidado, $frequencia);
+    }
+
+    public function excluir($id) {
+        $service = new CuidadoService();
+        return $service->excluir($id);
+    }
+
     public function formulario() {
-        $usuarioService = new UsuarioService();
-        $usuarios = $usuarioService->listarUsuarios();
+        // Para o form de cuidados, geralmente precisamos da lista de usuarios e plantas para o <select>
+        $userService = new UsuarioService();
         $plantaService = new PlantaService();
-        $plantas = $plantaService->listarPlantas();
-        // Passe os dados de usuarios e plantas
-        $this->template->layout("\\public\\cuidados\\form.php", ["usuarios" => $usuarios, "plantas" => $plantas]);
-}
-
-    public function alterarForm() {
-        $id = $_GET["id"];
-        $service = new CuidadoService();
-        $resultado = $service->listarId($id);
-        $usuarioService = new UsuarioService();
-        $usuarios = $usuarioService->listarUsuarios();
-        $plantaService = new PlantaService();
-        $plantas = $plantaService->listarPlantas();
-        $this->template->layout("\\public\\cuidados\\form.php", ["cuidado" => $resultado, "usuarios" => $usuarios, "plantas" => $plantas]);
+        
+        return [
+            "usuarios" => $userService->listar(),
+            "plantas" => $plantaService->listar()
+        ];
     }
 
-    public function alterar() {
-        $id = $_POST["id"];
-        $usuario_id = $_POST["usuario_id"];
-        $planta_id = $_POST["planta_id"];
-        $tipo_cuidado = $_POST["tipo_cuidado"];
-        $frequencia = $_POST["frequencia"];
+    // Atenção: No Rotas.php você definiu o metodo como "alterarForm"
+    public function alterarForm($id) {
         $service = new CuidadoService();
-        $service->alterar($id, $usuario_id, $planta_id, $tipo_cuidado, $frequencia);
-        header("location: /sistema_plantas/cuidados/lista?info=2");
-    }
+        $userService = new UsuarioService();
+        $plantaService = new PlantaService();
 
-    public function excluir() {
-        $id = $_GET["id"];
-        $service = new CuidadoService();
-        $service->excluir($id);
-        header("location: /sistema_plantas/cuidados/lista?info=3");
+        return [
+            "cuidado" => $service->buscar($id),
+            "usuarios" => $userService->listar(),
+            "plantas" => $plantaService->listar()
+        ];
     }
 }

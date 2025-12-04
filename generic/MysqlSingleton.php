@@ -1,34 +1,29 @@
 <?php
-class MysqlSingleton {
+namespace generic;
+
+use generic\MysqlFactory;
+
+class MysqlSingleton
+{
     private static $instance = null;
-    private $conexao = null;
+    private $conexao;
 
-    private $dsn = 'mysql:host=localhost;dbname=sistema_plantas';
-    private $usuario = 'root';
-    private $senha = '';
-
-    private function __construct() {
-        if ($this->conexao == null) {
-            $this->conexao = new PDO($this->dsn, $this->usuario, $this->senha);
-        }
+    private function __construct()
+    {
+        
+        $this->conexao = (new MysqlFactory())->getConnection();
     }
 
-    public static function getInstance() {
-        if (self::$instance == null) {
-            self::$instance = new MysqlSingleton();
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
         }
         return self::$instance;
     }
 
-    public function executar($query, $param = array()) {
-        if ($this->conexao) {
-            $sth = $this->conexao->prepare($query);
-            foreach ($param as $k => $v) {
-                $sth->bindValue($k, $v);
-            }
-            $sth->execute();
-            return $sth->fetchAll(PDO::FETCH_ASSOC);
-        }
-        return [];
+    public function getConnect()
+    {
+        return $this->conexao;
     }
 }

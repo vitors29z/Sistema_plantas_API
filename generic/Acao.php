@@ -29,13 +29,15 @@ class Acao
             if($parametros){
                 $para=[];
                 foreach($parametros as $v){
-                        $name = $v->getName();
+                $name = $v->getName();
 
-                        if(!isset($returnParam[$name])){
-                            return false;
-                        }
-                        $para[$name] = $returnParam[$name];
+                
+                if(!isset($returnParam[$name])){
+                    return false; 
                 }
+                
+                $para[$name] = $returnParam[$name];
+            }
                return $reflectMetodo->invokeArgs(new $end->classe(),$para);
 
             }
@@ -46,9 +48,9 @@ class Acao
     }
 
     private function endpointMetodo()
-    {
-        return isset($this->endpoint [$_SERVER["REQUEST_METHOD"]]) ? $this -> endpoint[$S_SERVER["REQUEST_METHOD"]] : null;
-    }
+{
+    return isset($this->endpoint[$_SERVER["REQUEST_METHOD"]]) ? $this->endpoint[$_SERVER["REQUEST_METHOD"]] : null;
+}
 
     private function getPost(){
         if($_POST){

@@ -6,14 +6,14 @@ use Firebase\JWT\Key;
 
 class JWTAuth
 {
-    private string $key = ""
+    private string $key = "aklsjdalksdaskdlasd223asd10"
 
     public function criarChave($dados)
     {
         $hora = time();
         $payload = [
-            'iat' => $hora
-            'exp' => $hora + 180000
+            'iat' => $hora,
+            'exp' => $hora + 180000,
             'uid' => $dados
         ];
 

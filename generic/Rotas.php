@@ -8,33 +8,27 @@ class Rotas
 
     public function __construct()
     {
-        // Mapeamento de rotas para URLs (Ex: /sistema_plantas/usuarios/...)
+        
         $this->endpoints = [
-            
-            // =============================================================
-            // ROTAS DE USUARIOS
-            // =============================================================
+
             "usuarios" => new Acao([
-                Acao::POST => new Endpoint("Usuarios", "inserir"), // Criar (POST)
-                Acao::GET => new Endpoint("Usuarios", "listar"),    // Ler/Listar (GET)
-                Acao::PUT => new Endpoint("Usuarios", "alterar"),  // Atualizar (PUT) - se voce usar PUT
-                Acao::DELETE => new Endpoint("Usuarios", "excluir") // Deletar (DELETE) - se voce usar DELETE
+                Acao::POST => new Endpoint("Usuarios", "inserir"),
+                Acao::GET => new Endpoint("Usuarios", "listar"), 
+                Acao::PUT => new Endpoint("Usuarios", "alterar"),
+                Acao::DELETE => new Endpoint("Usuarios", "excluir")
             ]),
 
-            // Rotas que usam o metodo GET para acoes específicas de tela
+            
             "usuarios/formulario" => new Acao([
-                Acao::GET => new Endpoint("Usuarios", "formulario") // Formulario de Insercaoo
+                Acao::GET => new Endpoint("Usuarios", "formulario")
             ]),
             "usuarios/formularioalterar" => new Acao([
-                Acao::GET => new Endpoint("Usuarios", "formularioalterar") // Formulario de Alteracao
+                Acao::GET => new Endpoint("Usuarios", "formularioalterar")
             ]),
             "usuarios/excluir" => new Acao([
-                Acao::GET => new Endpoint("Usuarios", "excluir") // Exclusao via GET (Como voce fez nas views)
+                Acao::GET => new Endpoint("Usuarios", "excluir") 
             ]),
-            
-            // =============================================================
-            // ROTAS DE PLANTAS
-            // =============================================================
+
             "plantas" => new Acao([
                 Acao::POST => new Endpoint("Plantas", "inserir"),
                 Acao::GET => new Endpoint("Plantas", "listar"),
@@ -42,7 +36,7 @@ class Rotas
                 Acao::DELETE => new Endpoint("Plantas", "excluir")
             ]),
 
-            // Rotas que usam o metodo GET para acoes especificas de tela
+            
             "plantas/formulario" => new Acao([
                 Acao::GET => new Endpoint("Plantas", "formulario")
             ]),
@@ -53,9 +47,7 @@ class Rotas
                 Acao::GET => new Endpoint("Plantas", "excluir")
             ]),
 
-            // =============================================================
-            // ROTAS DE CUIDADOS
-            // =============================================================
+
             "cuidados" => new Acao([
                 Acao::POST => new Endpoint("Cuidados", "inserir"),
                 Acao::GET => new Endpoint("Cuidados", "listar"),
@@ -63,14 +55,14 @@ class Rotas
                 Acao::DELETE => new Endpoint("Cuidados", "excluir")
             ]),
             
-            // Rotas que usam o metodo GET para acoes especificas de tela
+            
             "cuidados/formulario" => new Acao([
                 Acao::GET => new Endpoint("Cuidados", "formulario")
             ]),
             "cuidados/formularioalterar" => new Acao([
-                Acao::GET => new Endpoint("Cuidados", "alterarForm") // Nome do metodo no seu Controller: alterarForm()
+                Acao::GET => new Endpoint("Cuidados", "alterarForm")
             ]),
-            "cuidados/lista" => new Acao([ // Rota usada no header location
+            "cuidados/lista" => new Acao([ 
                 Acao::GET => new Endpoint("Cuidados", "listar")
             ]),
             "cuidados/excluir" => new Acao([

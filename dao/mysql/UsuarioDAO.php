@@ -1,49 +1,52 @@
 <?php
 namespace dao\mysql;
 
-use dao\IUsuarioDAO;
-use generic\MysqlFactory;
+use generic\MysqlSingleton;
+use PDO;
 
-class UsuarioDAO extends MysqlFactory implements IUsuarioDAO {
-    public function listar() {
-        $sql = "select id, nome, email from usuarios";
-        $retorno = $this->banco->executar($sql);
-        return $retorno;
+class UsuarioDAO 
+{
+    private $pdo;
+
+    public function __construct() {
+        $this->pdo = MysqlSingleton::getInstance()->getConnect();
     }
 
     public function inserir($nome, $email) {
-        $sql = "insert into usuarios (nome, email) values (:nome, :email)";
-        $param = [
-            ":nome" => $nome,
-            ":email" => $email
-        ];
-        $retorno = $this->banco->executar($sql, $param);
-        return $retorno;
+        $sql = "INSERT INTO usuarios (nome, email) VALUES (:nome, :email)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':nome', $nome);
+        $stmt->bindValue(':email', $email);
+        return $stmt->execute();
     }
 
-    public function listarId($id) {
-        $sql = "select id, nome, email from usuarios where id=:id";
-        $param = [
-            ":id" => $id
-        ];
-        $retorno = $this->banco->executar($sql, $param);
-        return $retorno;
+    public function listar() {
+        $sql = "SELECT * FROM usuarios ORDER BY nome";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function buscarPorId($id) {
+        $sql = "SELECT * FROM usuarios WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function alterar($id, $nome, $email) {
-        $sql = "update usuarios set nome=:nome, email=:email where id=:id";
-        $param = [
-            ":nome" => $nome,
-            ":email" => $email,
-            ":id" => $id
-        ];
-        $retorno = $this->banco->executar($sql, $param);
-        return $retorno;
+        $sql = "UPDATE usuarios SET nome = :nome, email = :email WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':nome', $nome);
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':id', $id);
+        return $stmt->execute();
     }
 
     public function excluir($id) {
-        $sql = "delete from usuarios where id=:id";
-        $param = [":id" => $id];
-        return $this->banco->executar($sql, $param);
-}
+        $sql = "DELETE FROM usuarios WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        return $stmt->execute();
+    }
 }

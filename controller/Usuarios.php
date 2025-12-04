@@ -1,37 +1,36 @@
 <?php
-
 namespace controller;
 
 use service\UsuarioService;
-use template\UsuarioTemp;
-use template\ITemplate;
 
+class Usuarios {
 
-class Usuarios 
-{
-    public function __construct()
-    {
-
-    }
-
-    public function listar()
-    {
+    public function listar() {
         $service = new UsuarioService();
-        $resultado = $service->listarUsuarios();
-        return $resultado;
+        return $service->listar();
     }
 
-    public function inserir ($nome, $endereco)
-    {
+    public function inserir($nome, $email) {
         $service = new UsuarioService();
-        $resultado = $service->inserir($nome, $endereco);
-        return $resultado;
+        return $service->inserir($nome, $email);
     }
 
-    public function teste($nome, $telefone)
-    {
-        return "$nome,$telefone";
+    public function alterar($id, $nome, $email) {
+        $service = new UsuarioService();
+        return $service->alterar($id, $nome, $email);
     }
-    public function teste2() {}
+
+    public function excluir($id) {
+        $service = new UsuarioService();
+        return $service->excluir($id);
+    }
+
+    public function formulario() {
+        return ["view" => "usuarios/form"];
+    }
+
+    public function formularioalterar($id) {
+        $service = new UsuarioService();
+        return $service->buscar($id);
+    }
 }
-    

@@ -1,51 +1,51 @@
 <?php
 namespace dao\mysql;
 
-use dao\IPlantaDAO;
-use generic\MysqlFactory;
+use generic\MysqlSingleton;
+use PDO;
 
-class PlantaDAO extends MysqlFactory implements IPlantaDAO {
-    public function listar() {
-        $sql = "select id, nome_cientifico, nome_popular from plantas";
-        $retorno = $this->banco->executar($sql);
-        return $retorno;
+class PlantaDAO {
+    private $pdo;
+
+    public function __construct() {
+        $this->pdo = MysqlSingleton::getInstance()->getConnect();
     }
 
     public function inserir($nome_cientifico, $nome_popular) {
-        $sql = "insert into plantas (nome_cientifico, nome_popular) values (:nome_cientifico, :nome_popular)";
-        $param = [
-            ":nome_cientifico" => $nome_cientifico,
-            ":nome_popular" => $nome_popular
-        ];
-        $retorno = $this->banco->executar($sql, $param);
-        return $retorno;
+        $sql = "INSERT INTO plantas (nome_cientifico, nome_popular) VALUES (:nc, :np)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':nc', $nome_cientifico);
+        $stmt->bindValue(':np', $nome_popular);
+        return $stmt->execute();
     }
 
-    public function listarId($id) {
-        $sql = "select id, nome_cientifico, nome_popular from plantas where id=:id";
-        $param = [
-            ":id" => $id
-        ];
-        $retorno = $this->banco->executar($sql, $param);
-        return $retorno;
+    public function listar() {
+        $sql = "SELECT * FROM plantas ORDER BY nome_popular";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function alterar($id, $nome_cientifico, $nome_popular) {
-        $sql = "update plantas set nome_cientifico=:nome_cientifico, nome_popular=:nome_popular where id=:id";
-        $param = [
-            ":nome_cientifico" => $nome_cientifico,
-            ":nome_popular" => $nome_popular,
-            ":id" => $id
-        ];
-        $retorno = $this->banco->executar($sql, $param);
-        return $retorno;
+        $sql = "UPDATE plantas SET nome_cientifico = :nc, nome_popular = :np WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':nc', $nome_cientifico);
+        $stmt->bindValue(':np', $nome_popular);
+        $stmt->bindValue(':id', $id);
+        return $stmt->execute();
     }
 
-
     public function excluir($id) {
-        $sql = "delete from plantas where id=:id";
-        $param = [":id" => $id];
-        return $this->banco->executar($sql, $param);
-}
+        $sql = "DELETE FROM plantas WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        return $stmt->execute();
+    }
 
+    public function buscarPorId($id) {
+        $sql = "SELECT * FROM plantas WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

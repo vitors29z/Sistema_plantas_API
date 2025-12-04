@@ -2,32 +2,36 @@
 namespace controller;
 
 use service\PlantaService;
-use template\PlantaTemp;
-use template\ITemplate;
 
-class Plantas
-{
-    public function __construct()
-    {
+class Plantas {
 
+    public function listar() {
+        $service = new PlantaService();
+        return $service->listar();
     }
 
-    public function listar(){
-    $service = new PlantaService();
-    $resultado = $service->listarPlantas();
-    return $resultado;
+    public function inserir($nome_cientifico, $nome_popular) {
+        $service = new PlantaService();
+        return $service->inserir($nome_cientifico, $nome_popular);
     }
 
-    public function inserir($nome_popular,$nome_cientifico)
-    {
-        $service = new  PlantaService();
-        $resultado = $service->inserir($nome_popular,$nome_cientifico);
-        return $resultado;
+    public function alterar($id, $nome_cientifico, $nome_popular) {
+        $service = new PlantaService();
+        return $service->alterar($id, $nome_cientifico, $nome_popular);
     }
 
-    public function teste($nome_popular,$nome_cientifico)
-    {
-        return "$nome_popular,$nome_cientifico";
+    public function excluir($id) {
+        $service = new PlantaService();
+        return $service->excluir($id);
     }
-    public function teste2(){}
+
+    // Métodos de View (retornam dados para preencher a tela ou caminho)
+    public function formulario() {
+        return ["view" => "plantas/form"]; 
+    }
+
+    public function formularioalterar($id) {
+        $service = new PlantaService();
+        return $service->buscar($id); // Retorna os dados para preencher o form de edição
+    }
 }
